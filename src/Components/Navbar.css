@@ -1,0 +1,41 @@
+.navbar {
+    background-color: #333;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    height: 60px;
+    
+
+  }
+  
+  .navbar-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    padding: 0 px; 
+  }
+  
+  .navbar-item {
+    padding: 1px;
+  }
+  
+  .navbar-button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    margin-right: 2px;
+    transition: background-color 0.5s, color 0.5s;
+  }
+  
+  .navbar-button:last-child {
+    margin-right: 0;
+  }
+  
+  .navbar-item:hover {
+    background-color: #04AA6D;
+    color: white;
+    transition: background-color 0.5s, color 0.5s;
+
+  }

@@ -4,8 +4,6 @@
     width: 100%;
     top: 0;
     height: 60px;
-    
-
   }
   
   .navbar-list {
@@ -15,7 +13,7 @@
     display: flex;
     padding: 0 px; 
   }
-  
+
   .navbar-item {
     padding: 1px;
   }

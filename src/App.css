@@ -4,12 +4,10 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 20vh;
-  display: in;
+  min-height: 15vh;
   flex-direction: column;
   align-items: center;
   justify-content: right;
-  font-size: calc(1px + 2vmin);
   color: white;
 }
 
@@ -42,4 +40,9 @@
   display: block;
   padding: 8px;
   background-color: #dddddd;
+}
+
+.custom-card {
+  width: 42rem;
+  margin: 0 auto; /* Center the card horizontally */
 }

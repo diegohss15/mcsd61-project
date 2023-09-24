@@ -1,17 +1,42 @@
-import React from 'react';
-import './Navbar.css';
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import Dropdown from 'react-bootstrap/Dropdown';
+import Button from 'react-bootstrap/Button';
 
-function Navbar() {
+
+function TopBar() {
   return (
-    <nav className="navbar">
-      <ul className="navbar-list">
-        <li className="navbar-item"><button className="navbar-button">Home(Dashboard)</button></li>
-        <li className="navbar-item"><button className="navbar-button">Tickets</button></li>
-        <li className="navbar-item"><button className="navbar-button">History</button></li>
-        <li className="navbar-item"><button className="navbar-button">Contact</button></li>
-      </ul>
-    </nav>
+    <>
+      <Navbar bg="dark" data-bs-theme="dark">
+        <Container>
+          <Navbar.Brand href="#home">Ticket Manager</Navbar.Brand>
+          <Nav className="me-auto">
+            <Nav.Link href="#home">Dashboard</Nav.Link>
+            <Nav.Link href="#features">New Ticker</Nav.Link>
+            <Nav.Link href="#pricing">Something else</Nav.Link>
+            <Button variant="success">+ New Ticket</Button>{' '}
+
+          </Nav>
+        
+          <Dropdown>
+            <Dropdown.Toggle variant="success" id="dropdown-basic">
+              Account
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item href="#/action-1">Profile</Dropdown.Item>
+              <Dropdown.Item href="#/action-2">Another Option</Dropdown.Item>
+              <Dropdown.Item href="#/action-3">Log out</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+
+
+
+        </Container>
+      </Navbar>
+    </>
   );
 }
 
-export default Navbar;
+export default TopBar;

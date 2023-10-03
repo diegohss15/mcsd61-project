@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // To Import Link
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -10,22 +11,25 @@ function TopBar() {
     <>
       <Navbar bg="dark" variant="dark" expand="md">
         <Container>
-          <Navbar.Brand href="#home">React Project</Navbar.Brand>
+          <Link to="/"> <Navbar.Brand>Task Manager</Navbar.Brand></Link>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="#home">Dashboard</Nav.Link>
-              <Nav.Link href="#features">New Ticket</Nav.Link>
+              <Link to="/" className="nav-link">Dashboard</Link> {/*Link*/}
               <Nav.Link href="#pricing">Something else</Nav.Link>
-              <Button variant="success">+ New Ticket</Button>
-              <br/>
+              
+
+              <Link to="/new-ticket" className="nav-link"> {/*Here I wrapped the button with Link to work*/}
+                <Button variant="success">+ New Ticket</Button>
+              </Link>
+              <br />
             </Nav>
             <Dropdown>
               <Dropdown.Toggle variant="success" id="dropdown-basic">
                 Username
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item href="#/action-1">Profile</Dropdown.Item>
+                 <Dropdown.Item href="/profile">Profile</Dropdown.Item> {/*Here I used the HTML href and it worked, so no need Link?*/}
                 <Dropdown.Item href="#/action-2">Another Option</Dropdown.Item>
                 <Dropdown.Item href="#/action-3">Log out</Dropdown.Item>
               </Dropdown.Menu>

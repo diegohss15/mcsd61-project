@@ -1,21 +1,31 @@
 import React from 'react';
 import './App.css';
-import Dashboard from './Components/Dashboard';
-import Navbar from './Components/Navbar';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Import Routes
+import Navbar from './Components/TopBar';
+import Dashboard from './Components/pages/Dashboard';
+import NewTicket from './Components/pages/NewTicket';
+import Profile from './Components/pages/profile';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <Navbar />
-      <header className="App-header">
-        <h1>Helpdesk Tickets</h1>
-      </header>
-      <main className='body'>
-        <Dashboard />
-      </main>
-    </div>
+    <Router>
+      <div className="App">
+        <Navbar />
+        <header className="App-header">
+          <h1>Helpdesk Tickets</h1>
+        </header>
+        <main className='body'>
+          <Routes> {/* Use Routes instead of Switch */}
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/new-ticket" element={<NewTicket />} />
+            <Route path="/profile" element={<Profile/>} />
+
+          </Routes>
+        </main>
+      </div>
+    </Router>
   );
 }
 

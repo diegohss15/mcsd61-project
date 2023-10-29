@@ -1,29 +1,54 @@
+import { useState, useEffect } from 'react';
+import { db } from '../../firebase';
+import { collection, getDocs } from 'firebase/firestore';
 import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
-import Nav from 'react-bootstrap/Nav';
 import Table from 'react-bootstrap/Table';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import ReactPaginate from 'react-paginate';
+
+ {/* Query from Firebase, collect up to 10 items per page */}
 
 function CardCreate() {
-    return (
-        <div className='cards' style={{
-            width: '70%',
-            margin: '15%', // Center horizontally
-            minHeight: '0vh', // 50% of the viewport height
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            display: 'inline-block'
-        }}>
-            <p>This is the main page, dashboard where user can access the relevant info about tickets</p>
+    const [tasks, setTasks] = useState([]);
+    const [pageNumber, setPageNumber] = useState(0);
+    const tasksPerPage = 10;
 
-            <Tabs
-                defaultActiveKey="profile"
-                id="justify-tab-example"
-                className="mb-3"
-                justify
-            >
+    useEffect(() => {
+        const fetchTasks = async () => {
+            try {
+                const querySnapshot = await getDocs(collection(db, 'tickets'));
+                const taskData = [];
+                querySnapshot.forEach((doc) => {
+                    taskData.push({ id: doc.id, ...doc.data() });
+                });
+                setTasks(taskData);
+            } catch (error) {
+                console.error('Error fetching tasks: ', error);
+            }
+        };
+
+        fetchTasks();
+    }, []);
+
+    const pagesVisited = pageNumber * tasksPerPage;
+    const displayedTasks = tasks.slice(
+        pagesVisited,
+        pagesVisited + tasksPerPage
+    );
+
+    const pageCount = Math.ceil(tasks.length / tasksPerPage);
+
+    const changePage = ({ selected }) => {
+        setPageNumber(selected);
+    };
+
+     {/* End of Query from Firebase */}
+
+
+    return (
+        <div className="cards" style={{ width: '70%', margin: '15%', minHeight: '0vh', display: 'flex', alignItems: 'center', justifyContent: 'center', display: 'inline-block' }}>
+            <Tabs defaultActiveKey="home" id="justify-tab-example" className="mb-3" justify>
                 <Tab eventKey="home" title="Open">
                     <Table striped bordered hover size="sm">
                         <thead>
@@ -37,36 +62,51 @@ function CardCreate() {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Mark</td>
-                                <td>IT</td>
-                                <td>Normal</td>
-                                <td>Username</td>
-                                <td><Button>Takeover</Button></td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Jacob</td>
-                                <td>HR</td>
-                                <td>High</td>
-                                <td>Username 2</td>
-                                <td><Button>Takeover</Button></td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Larry the Bird</td>
-                                <td>Marketing</td>
-                                <td>Critical</td>
-                                <td>Username 3</td>
-                                <td><Button>Takeover</Button></td>
-
-                            </tr>
+                            {displayedTasks.map((task, index) => (
+                                <tr key={task.id}>
+                                    <td>{index + 1}</td>
+                                    <td>{task.title}</td>
+                                    <td>{task.category}</td>
+                                    <td>{task.priority}</td>
+                                    <td>{task.createdBy}</td>
+                                    <td><Button>Takeover</Button></td>
+                                </tr>
+                            ))}
                         </tbody>
                     </Table>
+
+                    {/* React Pages */}
+
+                    <ReactPaginate
+                        previousLabel={
+                            <Button variant="outline-secondary" style={{ marginRight: '5px' }} className="btn-pagination">
+                                Previous
+                            </Button>
+                        }
+                        nextLabel={
+                            <Button variant="outline-secondary" style={{ marginLeft: '5px' }} className="btn-pagination">
+                                Next
+                            </Button>
+                        }
+                        pageCount={pageCount}
+                        onPageChange={changePage}
+                        containerClassName={'pagination'}
+                        previousLinkClassName={'previous'}
+                        nextLinkClassName={'next'}
+                        disabledClassName={'disabled'}
+                        activeClassName={'active'}
+                        pageClassName={'page-item'}
+                        pageLinkClassName={'page-link'}
+                        marginPagesDisplayed={1}
+                        pageRangeDisplayed={2}
+                        subContainerClassName={'pages pagination'}
+                    />
+                    {/* React Pages */}
+
                 </Tab>
-                <Tab eventKey="profile" title="Assigned to me">
-                <Table striped bordered hover size="sm">
+
+                <Tab eventKey="assigned" title="Assigned to me">
+                    <Table striped bordered hover size="sm">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -78,36 +118,12 @@ function CardCreate() {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Mark</td>
-                                <td>IT</td>
-                                <td>Normal</td>
-                                <td>Username</td>
-                                <td><Button>Takeover</Button></td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Jacob</td>
-                                <td>HR</td>
-                                <td>High</td>
-                                <td>Username 2</td>
-                                <td><Button>Takeover</Button></td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Larry the Bird</td>
-                                <td>Marketing</td>
-                                <td>Critical</td>
-                                <td>Username 3</td>
-                                <td><Button>Takeover</Button></td>
-
-                            </tr>
+                            {/* Area designed for tasks assigned to the user (Login system must work first) */}
                         </tbody>
                     </Table>
                 </Tab>
-                <Tab eventKey="longer-tab" title="All tickets">
-                <Table striped bordered hover size="sm">
+                <Tab eventKey="all" title="All tickets">
+                    <Table striped bordered hover size="sm">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -119,36 +135,11 @@ function CardCreate() {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Mark</td>
-                                <td>IT</td>
-                                <td>Normal</td>
-                                <td>Username</td>
-                                <td><Button>Takeover</Button></td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Jacob</td>
-                                <td>HR</td>
-                                <td>High</td>
-                                <td>Username 2</td>
-                                <td><Button>Takeover</Button></td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Larry the Bird</td>
-                                <td>Marketing</td>
-                                <td>Critical</td>
-                                <td>Username 3</td>
-                                <td><Button>Takeover</Button></td>
-
-                            </tr>
+                            {/* Display all available tasks */}
                         </tbody>
                     </Table>
                 </Tab>
             </Tabs>
-
         </div>
     );
 }

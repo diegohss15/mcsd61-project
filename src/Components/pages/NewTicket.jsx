@@ -1,96 +1,155 @@
+import { useState } from 'react';
+import { db } from '../../firebase';
+import { collection, addDoc } from 'firebase/firestore';
+
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import Nav from 'react-bootstrap/Nav';
 import Form from 'react-bootstrap/Form';
+import Nav from 'react-bootstrap/Nav';
 import { Link } from 'react-router-dom';
 
 function NewTicket() {
-    return (
-    /** CSS from div - adding CSS style here make the code use this as a priority **/
-        <div className='cards' style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-        }}>
-    {/** End of CSS from div **/}
-            <Card className='custom-card' style={{ width: '42rem' }}>
-                <Card.Header>
-                    <Nav variant="pills" defaultActiveKey="#first" >
-                        <Nav.Item>
-                        <Link to="/" className="nav-link"> <Button variant="primary">Go back</Button></Link>
-                        </Nav.Item>
-                    </Nav>
-                </Card.Header>
-                <Card.Body>
-                    <Card.Title>Create your task:</Card.Title>
-                    <br />
+  const [formData, setFormData] = useState({
+    category: '',
+    priority: '',
+    title: '',
+    description: '',
+    assignTo: '',
+  });
 
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
 
-                        <Form.Select aria-label="Default select example" required>
-                            <option>Category</option>
-                            <option value="1">IT</option>
-                            <option value="2">Marketing</option>
-                            <option value="3">HR</option>
-                        </Form.Select>
-                        &nbsp;&nbsp;&nbsp;
-                        <Form.Select aria-label="Default select example">
-                            <option>Priority</option>
-                            <option value="1">Normal</option>
-                            <option value="2">High</option>
-                            <option value="3">Critical</option>
-                        </Form.Select>
+    try {
+      const docRef = await addDoc(collection(db, 'tickets'), formData);
 
-                    </div>
-                    <Card.Text>
-                        <br />
-                        <Form>
-                            <Form.Group className="mb-3" controlId="formBasicEmail">
-                                <Form.Label>Title</Form.Label>
-                                <Form.Control type="text" placeholder="Enter task title" required />
+      console.log('Document written with ID: ', docRef.id);
 
-                            </Form.Group>
+      setFormData({
+        category: '',
+        priority: '',
+        title: '',
+        description: '',
+        assignTo: '',
+      });
+    } catch (error) {
+      console.error('Error adding document: ', error);
+    }
+  };
 
-                            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                                <Form.Label>Describe your issue: </Form.Label>
-                                <Form.Control as="textarea" rows={3} required />
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
-                            </Form.Group>
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <Form.Select aria-label="Default select example">
-                                    <option>Assign to:</option>
-                                    <option value="1">User 1</option>
-                                    <option value="2">User 2</option>
-                                    <option value="3">User 3</option>
-                                </Form.Select>
+  return (
+    <div className="cards">
+      <Card className="custom-card" style={{ width: '42rem' }}>
+        <Card.Header>
+          <Nav variant="pills" defaultActiveKey="#first">
+            <Nav.Item>
+              <Link to="/" className="nav-link">
+                <Button variant="primary">Go back</Button>
+              </Link>
+            </Nav.Item>
+          </Nav>
+        </Card.Header>
+        <Card.Body>
+          <Card.Title>Create your task:</Card.Title>
+          <br />
 
-                            </div>
-                            <br />
-                            <>
-                                <Form.Group controlId="formFileMultiple" className="mb-3">
-                                    <Form.Label>Attachment</Form.Label>
-                                    <Form.Control type="file" multiple />
-                                </Form.Group>
-                            </>
-                            <Form.Group className="mb-3">
-                                <Form.Text className="text-muted">
-                                    <br />
-                                    1 - We aim to solve all tickets in 24-hours.<br />
-                                    2 - Ticket assignment doesn't always speed things up; it can actually slow them down. <br />
-                                    3 - Critical Priority is limited! If you have no permission, request it from your supervisor.
-                                </Form.Text>
-                            </Form.Group>
-                            <Button type="submit" variant="success"> Create Ticket </Button> &nbsp;&nbsp;&nbsp;
-                            <Button variant="outline-danger"> Cancel </Button>
-                        </Form>
+          <Form onSubmit={handleFormSubmit}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <Form.Select
+                name="category"
+                value={formData.category}
+                onChange={handleInputChange}
+                aria-label="Default select example"
+                required
+              >
+                <option value="">Category</option>
+                <option value="IT">IT</option>
+                <option value="Marketing">Marketing</option>
+                <option value="HR">HR</option>
+              </Form.Select>
+              &nbsp;&nbsp;&nbsp;
+              <Form.Select
+                name="priority"
+                value={formData.priority}
+                onChange={handleInputChange}
+                aria-label="Default select example"
+                required
+              >
+                <option value="">Priority</option>
+                <option value="Normal">Normal</option>
+                <option value="High">High</option>
+                <option value="Critical">Critical</option>
+              </Form.Select>
+            </div>
+            <Card.Text>
+              <br />
+              <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  placeholder="Enter task title"
+                  required
+                />
+              </Form.Group>
 
-                    </Card.Text>
-
-                </Card.Body>
-            </Card>
-
-        </div>
-    )
+              <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                <Form.Label>Describe your issue: </Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  required
+                />
+              </Form.Group>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Form.Select
+                  name="assignTo"
+                  value={formData.assignTo}
+                  onChange={handleInputChange}
+                  aria-label="Default select example"
+                >
+                  <option value="">Assign to:</option>
+                  <option value="User 1">User 1</option>
+                  <option value="User 2">User 2</option>
+                  <option value="User 3">User 3</option>
+                </Form.Select>
+              </div>
+              <br />
+              <>
+                <Form.Group controlId="formFileMultiple" className="mb-3">
+                  <Form.Label>Attachment</Form.Label>
+                  <Form.Control type="file" multiple />
+                </Form.Group>
+              </>
+              <Form.Group className="mb-3">
+                <Form.Text className="text-muted">
+                  <br />
+                  1 - We aim to solve all tickets in 24-hours.<br />
+                  2 - Ticket assignment doesn't always speed things up; it can actually slow them down. <br />
+                  3 - Critical Priority is limited! If you have no permission, request it from your supervisor.
+                </Form.Text>
+              </Form.Group>
+              <Button type="submit" variant="success">
+                Create Ticket
+              </Button>{' '}
+              &nbsp;&nbsp;&nbsp;
+              <Button variant="outline-danger">Cancel</Button>
+            </Card.Text>
+          </Form>
+        </Card.Body>
+      </Card>
+    </div>
+  );
 }
 
 export default NewTicket;

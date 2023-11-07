@@ -5,6 +5,8 @@ import Navbar from './Components/TopBar';
 import Dashboard from './Components/pages/Dashboard';
 import NewTicket from './Components/pages/NewTicket';
 import Profile from './Components/pages/profile';
+import EditProfile from './Components/pages/editProfile';
+
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -21,6 +23,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/new-ticket" element={<NewTicket />} />
             <Route path="/profile" element={<Profile/>} />
+            <Route path="/editProfile" element={<EditProfile/>} />
 
           </Routes>
         </main>

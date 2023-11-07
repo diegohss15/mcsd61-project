@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+
 
 function Profile() {
   return (
@@ -13,10 +15,7 @@ function Profile() {
                     <img src="https://images.pexels.com/photos/18466844/pexels-photo-18466844/free-photo-of-fashion-sunglasses-people-woman.jpeg"
                       alt="Profile Image" className="img-fluid img-thumbnail mt-4 mb-2"
                       style={{ width: '150px', zIndex: 1 }} />
-                    <button type="button" className="btn btn-outline-dark" data-mdb-ripple-color="dark"
-                      style={{ zIndex: 1 }}>
-                      Edit profile
-                    </button>
+                        <Link to="/editProfile" className="btn btn-outline-dark" style={{ zIndex: 1 }}>Edit profile</Link>        
                   </div>
                   <div className="ms-3" style={{ marginTop: '130px' }}>
                     <h5>Mary Jane</h5>

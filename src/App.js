@@ -8,6 +8,8 @@ import Profile from './Components/pages/profile';
 import Login from "./Components/Login";
 import Register from "./Components/Register";
 import Forgot from "./Components/Forgot";
+import EditProfile from './Components/pages/editProfile';
+
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -30,6 +32,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/new-ticket" element={<NewTicket />} />
             <Route path="/profile" element={<Profile/>} />
+            <Route path="/editProfile" element={<EditProfile/>} />
 
           </Routes>
         </main>
